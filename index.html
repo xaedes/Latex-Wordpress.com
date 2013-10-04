@@ -46,17 +46,19 @@
 <body>
 	<div id='results'> 
 		<div id='latex_output_img'>
-		
-		</div>
+			<div style="padding: 10px;">
+				<img src="" />
+			</div>
+		</div> 
 		<div id='wordpress'>
 			<div style="padding: 10px;">
-			<hr/>
-			Copy &amp; Paste this into wordpress
-			<br />
-			<input type='text' id='wordpress_out' value='test' />
-			<button id='conv_from_wordpress'>Extract Latex from Wordpress</button>
-			<br />
-			<a href='http://en.support.wordpress.com/latex/'>Help Site for Wordpress.com Latex-Processor</a>
+				<hr/>
+				Copy &amp; Paste this into wordpress
+				<br />
+				<input type='text' id='wordpress_out' value='test' />
+				<button id='conv_from_wordpress'>Extract Latex from Wordpress</button>
+				<br />
+				<a href='http://en.support.wordpress.com/latex/'>Help Site for Wordpress.com Latex-Processor</a>
 			</div>
 		</div>
 	</div>
@@ -83,7 +85,7 @@
 	    	url = get_latex_output_url(latex);
 
 	    	// Set preview image
-	    	$('#latex_output_img').css('background-image',"url('"+url+"')");
+	    	$('#latex_output_img img').attr('src',url).attr('alt', latex).attr('title', latex);
 	    	
 	    	// Set output text for copy&pasting into wordpress
 	    	$('#wordpress_out').attr('value',get_wordpress_output(url));
