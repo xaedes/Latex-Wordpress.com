@@ -1,0 +1,92 @@
+<html>
+<head>
+	<script type="text/javascript" ></script>
+	<style type="text/css">
+    #editor { 
+        /*position: absolute;*/
+        /*top: 0;*/
+        /*right: 0;*/
+        /*bottom: 0;*/
+        /*left: 0;*/
+        width: 50%;
+        height: 100%;
+    }
+	#results {
+    	width: 50%;
+    	height: 100%;
+    	float: right;
+    }
+    #latex_output_img {
+    	width: 100%;
+    	height: 50%;
+    	/*border: 1px solid black;*/
+    	float: none;
+    	background: no-repeat 10px 10px;
+    }
+    #wordpress {
+    	width: 100%;
+    	height: 50%;
+    	/*border: 1px solid black;*/
+    	float: none;
+    }
+    #wordpress_out {
+    	width: 100%;
+    } 
+	</style>
+</head>
+<body>
+	<div id="results"> 
+		<div id="latex_output_img">
+		
+		</div>
+		<div id="wordpress">
+			<hr/>
+			Copy &amp; Paste this into wordpress
+			<input type="text" id="wordpress_out" value="test" />
+			<a href="http://en.support.wordpress.com/latex/">Help Site for Wordpress.com Latex-Processor</a>
+		</div>
+	</div>
+	<div id="editor">
+	    \epsilon
+	</div>
+	<script src="js/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+	    var editor = ace.edit("editor");
+	    editor.setTheme("ace/theme/monokai");
+	    editor.getSession().setMode("ace/mode/latex");
+
+	    var get_latex_output_url = function(latex) {
+	    	return "http://s0.wp.com/latex.php?bg=ffffff&fg=000&s=1&latex=" + encodeURIComponent(latex);
+	    };
+
+	    var get_wordpress_output = function (url) {
+	    	return "<img src='" + url + "' />";
+	    }
+
+	    var change_latex = function(latex) {
+	    	// Get image url from latex processor
+	    	url = get_latex_output_url(latex);
+
+	    	// Set preview image
+	    	$("#latex_output_img").css("background-image","url('"+url+"')");
+	    	
+	    	// Set output text for copy&pasting into wordpress
+	    	$("#wordpress_out").attr("value",get_wordpress_output(url));
+	    };
+
+	    var get_editor_latex = function() {
+	    	latex = editor.getValue();
+	    	latex = latex.trim()
+	    	return latex;
+	    }
+
+	    editor.on("change", function(e) {
+	    	change_latex(get_editor_latex());
+
+	    });
+
+	    change_latex(get_editor_latex());
+	</script>
+</body>
+</html>
