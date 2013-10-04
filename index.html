@@ -46,7 +46,7 @@
 		
 		</div>
 		<div id='wordpress'>
-			<div style="padding: 10px;">
+			<!-- <div style="padding: 10px;"> -->
 			<hr/>
 			Copy &amp; Paste this into wordpress
 			<br />
@@ -54,7 +54,7 @@
 			<button id='conv_from_wordpress'>Extract Latex from Wordpress</button>
 			<br />
 			<a href='http://en.support.wordpress.com/latex/'>Help Site for Wordpress.com Latex-Processor</a>
-			</div>
+			<!-- </div> -->
 		</div>
 	</div>
 	<div id='editor'>
@@ -80,7 +80,7 @@
 	    	url = get_latex_output_url(latex);
 
 	    	// Set preview image
-	    	$('#latex_output_img').css('background-image',"url(''+url+'')");
+	    	$('#latex_output_img').css('background-image',"url('"+url+"')");
 	    	
 	    	// Set output text for copy&pasting into wordpress
 	    	$('#wordpress_out').attr('value',get_wordpress_output(url));
