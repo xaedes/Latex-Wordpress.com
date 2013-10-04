@@ -1,7 +1,7 @@
 <html>
 <head>
-	<script type="text/javascript" ></script>
-	<style type="text/css">
+	<script type='text/javascript' ></script>
+	<style type='text/css'>
     #editor { 
         /*position: absolute;*/
         /*top: 0;*/
@@ -29,39 +29,48 @@
     	/*border: 1px solid black;*/
     	float: none;
     }
+    #conv_from_wordpress {
+    	display: block;
+    	/*float: left;*/
+    }
     #wordpress_out {
+    	/*float: left;*/
+    	display: block;
     	width: 100%;
     } 
 	</style>
 </head>
 <body>
-	<div id="results"> 
-		<div id="latex_output_img">
+	<div id='results'> 
+		<div id='latex_output_img'>
 		
 		</div>
-		<div id="wordpress">
+		<div id='wordpress'>
 			<hr/>
 			Copy &amp; Paste this into wordpress
-			<input type="text" id="wordpress_out" value="test" />
-			<a href="http://en.support.wordpress.com/latex/">Help Site for Wordpress.com Latex-Processor</a>
+			<br />
+			<input type='text' id='wordpress_out' value='test' />
+			<button id='conv_from_wordpress'>Extract Latex from Wordpress</button>
+			<br />
+			<a href='http://en.support.wordpress.com/latex/'>Help Site for Wordpress.com Latex-Processor</a>
 		</div>
 	</div>
-	<div id="editor">
+	<div id='editor'>
 	    \epsilon
 	</div>
-	<script src="js/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script src='js/jquery-2.0.3.min.js' type='text/javascript' charset='utf-8'></script>
+	<script src='js/ace/ace.js' type='text/javascript' charset='utf-8'></script>
 	<script>
-	    var editor = ace.edit("editor");
-	    editor.setTheme("ace/theme/monokai");
-	    editor.getSession().setMode("ace/mode/latex");
+	    var editor = ace.edit('editor');
+	    editor.setTheme('ace/theme/monokai');
+	    editor.getSession().setMode('ace/mode/latex');
 
 	    var get_latex_output_url = function(latex) {
-	    	return "http://s0.wp.com/latex.php?bg=ffffff&fg=000&s=1&latex=" + encodeURIComponent(latex);
+	    	return 'http://s0.wp.com/latex.php?bg=ffffff&fg=000&s=1&latex=' + encodeURIComponent(latex);
 	    };
 
 	    var get_wordpress_output = function (url) {
-	    	return "<img src='" + url + "' />";
+	    	return '<img src="' + url + '" />';
 	    }
 
 	    var change_latex = function(latex) {
@@ -69,10 +78,10 @@
 	    	url = get_latex_output_url(latex);
 
 	    	// Set preview image
-	    	$("#latex_output_img").css("background-image","url('"+url+"')");
+	    	$('#latex_output_img').css('background-image',"url(''+url+'')");
 	    	
 	    	// Set output text for copy&pasting into wordpress
-	    	$("#wordpress_out").attr("value",get_wordpress_output(url));
+	    	$('#wordpress_out').attr('value',get_wordpress_output(url));
 	    };
 
 	    var get_editor_latex = function() {
@@ -81,10 +90,28 @@
 	    	return latex;
 	    }
 
-	    editor.on("change", function(e) {
+	    function getURLParameter(url, name) {
+	    	// derived from http://stackoverflow.com/a/1404100/798588
+		    return decodeURIComponent(
+		        (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1]
+		    );
+		}
+
+	    var get_latex_from_wordpress = function(html) {
+	    	start = html.indexOf('http://s0.wp.com');
+	    	end = html.indexOf('"',start);
+	    	url = html.substr(start,end-start);
+	    	return getURLParameter(url,'latex');
+	    }
+
+	    editor.on('change', function(e) {
 	    	change_latex(get_editor_latex());
 
 	    });
+
+	    $('#conv_from_wordpress').on('click', function(e) {
+	    	editor.setValue(get_latex_from_wordpress($('#wordpress_out').attr('value')));
+	    })
 
 	    change_latex(get_editor_latex());
 	</script>
