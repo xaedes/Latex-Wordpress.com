@@ -60,6 +60,7 @@
 <body>
 	<div id='main'>
 		<h1>Preview</h1>
+		<div id="size_slider"></div>
 		<div id="latex_output_img_container" class='ui-corner-all ui-widget'>
 			<img id='latex_output_img' src='' />
 		</div>
@@ -76,6 +77,7 @@
 			<a id="wpcomlatex_help" href='http://en.support.wordpress.com/latex/' target='_blank'>wp.com Latex-Processor</a>
 
 		</div>
+
 
 		<div id='editor' class='ui-corner-all'>i\hbar\frac{\partial}{\partial t}\left|\Psi(t)\right>=H\left|\Psi(t)\right></div>
 	</div>
@@ -96,6 +98,15 @@
 		        primary: "ui-icon-help"
 		      }
 		    });
+		$( "#size_slider" ).slider({
+			value:1,
+			min: -4,
+			max: 4,
+			step: 1,
+			slide: function( event, ui ) {
+			        update_preview();
+			      }
+		});
 
 	    var editor = ace.edit('editor');
 	    editor.setTheme('ace/theme/chrome');
@@ -106,7 +117,8 @@
 	    editor.renderer.setShowGutter(false); 
 
 	    var get_latex_output_url = function(latex) {
-	    	return 'http://s0.wp.com/latex.php?bg=ffffff&fg=000&s=1&latex=' + encodeURIComponent(latex);
+	    	size = $( "#size_slider" ).slider( "value" );
+	    	return 'http://s0.wp.com/latex.php?bg=ffffff&fg=000&s='+size+'&latex=' + encodeURIComponent(latex);
 	    };
 
 	    var get_wordpress_output = function (url) {
@@ -148,10 +160,14 @@
 	    	editor.setValue(get_latex_from_wordpress($('#wordpress_out').attr('value')));
 	    })
 
-	    editor.on('change', function(e) {
+	    var update_preview = function() {
 			if( $('#conv_from_latex').prop('checked') ) {
 	    		change_latex(get_editor_latex());
 	    	}
+	    }
+
+	    editor.on('change', function(e) {
+	    	update_preview();
 	    });
 
 	    change_latex(get_editor_latex());
