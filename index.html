@@ -2,8 +2,11 @@
 <head>
 	<script src='js/jquery-2.0.3.min.js' type='text/javascript' charset='utf-8'></script>
 	<script src='js/ace/ace.js' type='text/javascript' charset='utf-8'></script>
-	<script type='text/javascript' src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" type='text/javascript' charset='utf-8'></script>
+	<script src='js/spectrum.js' type='text/javascript' charset='utf-8'></script>
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="css/spectrum.css">
+
 
 	<style type='text/css'>
 	body {
@@ -46,15 +49,44 @@
     	margin-bottom: 10px;
     }
 
-  #toolbar {
-    padding: 4px;
-    /*display: inline-block;*/
-    margin-bottom: 10px;
-  }
-  /* support: IE7 */
-  *+html #toolbar {
-    /*display: inline;*/
-  }    
+	#toolbar {
+		padding: 4px;
+		/*display: inline-block;*/
+		margin-bottom: 10px;
+	}
+	/* support: IE7 */
+	*+html #toolbar {
+		/*display: inline;*/
+	}    
+
+	#colors {
+		float: left;
+		width: 20px;
+		height: 20px;
+		position: relative;
+		left: 0px;
+		top: 0px;
+	}
+
+	#foreground_color,
+	#background_color {
+		width: 15px;
+		height: 15px;
+		border: 1px solid #cecece;
+		position: absolute;
+	}
+
+	#foreground_color {
+		left: 10px;
+		top: 10px;
+		background: black;
+	}
+	#background_color {
+		left: 00px;
+		top: 00px;
+		background: white
+	}
+
 	</style>
 </head>
 <body>
@@ -62,6 +94,10 @@
 		<h1>Preview</h1>
 		<div id="size_slider"></div>
 		<div id="latex_output_img_container" class='ui-corner-all ui-widget'>
+			<div id='colors'>
+				<div id="background_color"></div>
+				<div id="foreground_color"></div>
+			</div>
 			<img id='latex_output_img' src='' />
 		</div>
 
@@ -80,9 +116,32 @@
 
 
 		<div id='editor' class='ui-corner-all'>i\hbar\frac{\partial}{\partial t}\left|\Psi(t)\right>=H\left|\Psi(t)\right></div>
+
+		<a href="" id="foobar">aerwre</a>
 	</div>
 
 	<script>
+		var bg = '#fff';
+		var fg = '#000';
+		var update_fg_color = function(color) {
+			fg = color.toHexString();
+			$("#foreground_color").css('background-color',fg);
+			update_preview();
+		}		
+		var update_bg_color = function(color) {
+			bg = color.toHexString();
+			$("#background_color").css('background-color',bg);
+			update_preview();
+		}
+		$("#foreground_color").spectrum({
+		    color: fg,
+		    change: update_fg_color,
+		});
+		$("#background_color").spectrum({
+		    color: bg,
+		    change: update_bg_color,
+		});
+
 		$('#conv_from_latex').button({
 		      icons: {
 		        primary: "ui-icon-arrowthick-1-n"
@@ -118,7 +177,7 @@
 
 	    var get_latex_output_url = function(latex) {
 	    	size = $( "#size_slider" ).slider( "value" );
-	    	return 'http://s0.wp.com/latex.php?bg=ffffff&fg=000&s='+size+'&latex=' + encodeURIComponent(latex);
+	    	return 'http://s0.wp.com/latex.php?bg='+bg.substr(1)+'&fg='+fg.substr(1)+'&s='+size+'&latex=' + encodeURIComponent(latex);
 	    };
 
 	    var get_wordpress_output = function (url) {
